@@ -41,7 +41,9 @@ const AdminUserView = () => {
     const user = useMemo(() => users.find(u => u.id === userId), [users, userId]);
     const isSelf = currentUser?.uid === userId;
 
-    const rolesList = ['Super Admin', 'Admin', 'Viewer'];
+    const rolesList = profile?.role === 'Super Admin' 
+        ? ['Super Admin', 'Admin', 'Viewer'] 
+        : ['Admin', 'Viewer'];
 
     const handleRoleUpdate = async (newRole) => {
         if (isSelf || isReadOnly) return;

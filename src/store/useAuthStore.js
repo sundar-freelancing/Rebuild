@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 import { auth, db, googleProvider } from '@/lib/firebase';
-import { 
-    onAuthStateChanged, 
-    signInWithEmailAndPassword, 
-    signOut, 
-    createUserWithEmailAndPassword, 
-    updateProfile, 
+import {
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    signOut,
+    createUserWithEmailAndPassword,
+    updateProfile,
     signInWithPopup,
     linkWithCredential,
     EmailAuthProvider
@@ -63,9 +63,9 @@ const useAuthStore = create((set, get) => ({
                 // Already exists as a personnel record by email
                 // We'll update the UID if it's different and merge
                 const existingDoc = qSnap.docs[0];
-                await setDoc(doc(db, 'users', existingDoc.id), { 
+                await setDoc(doc(db, 'users', existingDoc.id), {
                     uid: user.uid,
-                    lastLogin: serverTimestamp() 
+                    lastLogin: serverTimestamp()
                 }, { merge: true });
                 return;
             }
@@ -110,15 +110,15 @@ const useAuthStore = create((set, get) => ({
     signupWithGoogle: async (password) => {
         const res = await signInWithPopup(auth, googleProvider);
         const { user } = res;
-        
+
         const q = query(collection(db, 'users'), where('email', '==', user.email));
         const qSnap = await getDocs(q);
 
         if (!qSnap.empty) {
             // User already exists in personnel list, just update
-            await setDoc(doc(db, 'users', qSnap.docs[0].id), { 
+            await setDoc(doc(db, 'users', qSnap.docs[0].id), {
                 uid: user.uid,
-                lastLogin: serverTimestamp() 
+                lastLogin: serverTimestamp()
             }, { merge: true });
         } else {
             // New user, create their profile
@@ -141,7 +141,7 @@ const useAuthStore = create((set, get) => ({
         const res = await signInWithEmailAndPassword(auth, email, password);
         const userRef = doc(db, 'users', res.user.uid);
         const userSnap = await getDoc(userRef);
-        
+
         if (!userSnap.exists()) {
             await signOut(auth);
             throw { code: 'auth/user-not-found', message: 'User is not found' };
@@ -157,7 +157,7 @@ const useAuthStore = create((set, get) => ({
         // Find personnel record by email (handles cases where UID changed or was not linked)
         const q = query(collection(db, 'users'), where('email', '==', user.email));
         const qSnap = await getDocs(q);
-        
+
         if (qSnap.empty) {
             await signOut(auth);
             throw { code: 'auth/user-not-found', message: 'User is not found' };
@@ -165,9 +165,9 @@ const useAuthStore = create((set, get) => ({
 
         // Personnel found, update last login and latest auth UID
         const userDocRef = doc(db, 'users', qSnap.docs[0].id);
-        await setDoc(userDocRef, { 
+        await setDoc(userDocRef, {
             uid: user.uid,
-            lastLogin: serverTimestamp() 
+            lastLogin: serverTimestamp()
         }, { merge: true });
 
         return res;

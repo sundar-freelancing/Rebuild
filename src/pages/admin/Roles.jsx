@@ -68,7 +68,9 @@ const Roles = () => {
     const [selectedUser, setSelectedUser] = useState(null);
     const [targetRole, setTargetRole] = useState('');
 
-    const rolesList = ['Super Admin', 'Admin', 'Viewer'];
+    const rolesList = profile?.role === 'Super Admin' 
+        ? ['Super Admin', 'Admin', 'Viewer'] 
+        : ['Admin', 'Viewer'];
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
