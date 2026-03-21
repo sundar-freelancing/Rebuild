@@ -1,7 +1,7 @@
 import { ThemeProvider } from "@/context/ThemeContext";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
-import CookiePolicy from "@/pages/CookiePolicy";
+import RefundPolicy from "@/pages/RefundPolicy";
 import Courses from "@/pages/Courses";
 import Home from "@/pages/Home";
 import NotFound from "@/pages/NotFound";
@@ -58,7 +58,7 @@ const AppRoutes = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-of-service" element={<TermsOfService />} />
-        <Route path="/cookie-policy" element={<CookiePolicy />} />
+        <Route path="/refund-policy" element={<RefundPolicy />} />
       </Route>
       {/* Private Admin Routes */}
       <Route element={<AdminLayout />}>

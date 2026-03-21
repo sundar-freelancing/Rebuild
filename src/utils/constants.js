@@ -55,7 +55,7 @@ export const footerCourseLinks = [
 export const footerLegalLinks = [
     { name: "Privacy Policy", href: "/privacy-policy" },
     { name: "Terms of Service", href: "/terms-of-service" },
-    { name: "Cookie Policy", href: "/cookie-policy" },
+    { name: "Refund Policy", href: "/refund-policy" },
 ];
 
 export const placementStats = [

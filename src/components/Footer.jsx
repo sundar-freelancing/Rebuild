@@ -3,28 +3,15 @@ import { Globe, Mail, MapPin, MessageCircle, Phone, Sun, Moon, Monitor } from 'l
 import { Link } from 'react-router-dom';
 import { useTheme } from '@/context/ThemeContext';
 import useSiteConfigStore from '@/store/useSiteConfigStore';
-import usePublicStore from '@/store/usePublicStore';
 import logo from '@/assets/logo/logo.png';
-import { useEffect, useMemo } from 'react';
+
 
 const Footer = () => {
     const { theme, setTheme } = useTheme();
     const config = useSiteConfigStore((s) => s.config);
-    const { courses, initCourses } = usePublicStore();
 
     const primaryEmail = config.contactEmails[0] || 'info@rebuildit.in';
     const primaryPhone = config.contactPhones[0] || '+91 98765 43210';
-
-    useEffect(() => {
-        initCourses();
-    }, [initCourses]);
-
-    const randomCourses = useMemo(() => {
-        if (!courses || courses.length === 0) return [];
-        const activeCourses = courses.filter(c => !c.isDisabled);
-        // eslint-disable-next-line
-        return [...activeCourses].sort(() => 0.5 - Math.random()).slice(0, 5);
-    }, [courses]);
 
     const cycleTheme = () => {
         setTheme(theme === 'system' ? 'light' : theme === 'light' ? 'dark' : 'system');
@@ -76,19 +63,15 @@ const Footer = () => {
                     </div>
 
                     <div>
-                        <h5 className="text-white font-light mb-3 sm:mb-6 tracking-wide text-base sm:text-lg">Popular Courses</h5>
+                        <h5 className="text-white font-light mb-3 sm:mb-6 tracking-wide text-base sm:text-lg">Legal</h5>
                         <ul className="space-y-2 sm:space-y-3 text-sm sm:text-base font-light">
-                            {randomCourses.length > 0 ? (
-                                randomCourses.map((course, index) => (
-                                    <li key={index} className="flex items-start text-slate-200">
-                                        <span className="inline-block relative pl-3 before:absolute before:left-0 before:top-2 before:w-1 before:h-1 before:bg-primary/70 before:rounded-full">
-                                            {course.courseName}
-                                        </span>
-                                    </li>
-                                ))
-                            ) : (
-                                <li className="text-slate-400 italic text-sm">Discovering courses...</li>
-                            )}
+                            {footerLegalLinks.map((link, index) => (
+                                <li key={index}>
+                                    <Link className="text-slate-200 hover:text-white transition-all duration-300 hover:translate-x-1 inline-block" to={link.href}>
+                                        {link.name}
+                                    </Link>
+                                </li>
+                            ))}
                         </ul>
                     </div>
 
