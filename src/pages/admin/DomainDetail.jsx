@@ -4,6 +4,7 @@ import {
     Plus, Search, ArrowLeft, BookOpen, Layers, Edit2, Trash2, Eye, EyeOff, MoreVertical, LayoutGrid, Calendar, Clock
 } from 'lucide-react';
 import useAdminStore from '@/store/useAdminStore';
+import useAuthStore from '@/store/useAuthStore';
 import CourseTable from '@/components/admin/courses/CourseTable';
 import { Button } from '@/components/ui/button';
 import { db } from '@/lib/firebase';
@@ -14,6 +15,8 @@ const DomainDetail = () => {
     const { domainId } = useParams();
     const navigate = useNavigate();
     const { courses, domains, loading } = useAdminStore();
+    const profile = useAuthStore(s => s.profile);
+    const isReadOnly = profile?.role === 'Viewer';
     const [searchQuery, setSearchQuery] = useState('');
     const [isCourseDeleteOpen, setIsCourseDeleteOpen] = useState(false);
     const [deleteTarget, setDeleteTarget] = useState(null);
@@ -33,6 +36,7 @@ const DomainDetail = () => {
     };
 
     const handleToggleCourseStatus = async (course) => {
+        if (isReadOnly) return;
         try {
             await updateDoc(doc(db, 'domains', domainId, 'courses', course.id), {
                 isDisabled: !course.isDisabled,
@@ -44,7 +48,7 @@ const DomainDetail = () => {
     };
 
     const confirmDeleteCourse = async () => {
-        if (!deleteTarget) return;
+        if (!deleteTarget || isReadOnly) return;
         setActing(true);
         try {
             await deleteDoc(doc(db, 'domains', domainId, 'courses', deleteTarget.id));
@@ -95,10 +99,12 @@ const DomainDetail = () => {
                     </div>
                 </div>
                 <div className="flex items-center gap-3">
-                    <Button onClick={handleOpenAddCourse} className="h-12 px-6 rounded-2xl shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
-                        <Plus className="w-5 h-5 mr-2" />
-                        Create New Course
-                    </Button>
+                    {!isReadOnly && (
+                        <Button onClick={handleOpenAddCourse} className="h-12 px-6 rounded-2xl shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all">
+                            <Plus className="w-5 h-5 mr-2" />
+                            Create New Course
+                        </Button>
+                    )}
                 </div>
             </div>
 
@@ -122,6 +128,7 @@ const DomainDetail = () => {
                         courses={domainCourses}
                         onDelete={(course) => { setDeleteTarget(course); setIsCourseDeleteOpen(true); }}
                         onToggle={handleToggleCourseStatus}
+                        isReadOnly={isReadOnly}
                     />
                 </div>
             </div>

@@ -19,7 +19,7 @@ const DynamicIcon = ({ name, className }) => {
     return <IconComponent className={className} />;
 };
 
-const CourseTableRow = React.memo(({ course, onDelete, onToggle }) => {
+const CourseTableRow = React.memo(({ course, onDelete, onToggle, isReadOnly }) => {
     const navigate = useNavigate();
     return (
         <TableRow
@@ -57,7 +57,8 @@ const CourseTableRow = React.memo(({ course, onDelete, onToggle }) => {
                             e.stopPropagation();
                             onToggle(course);
                         }}
-                        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider w-fit border transition-all hover:scale-105 active:scale-95 ${course.isDisabled ? 'bg-red-500/10 text-red-500 border-red-500/20 hover:bg-red-500/20' : 'bg-green-500/10 text-green-600 border-green-500/20 hover:bg-green-500/20'}`}
+                        disabled={isReadOnly}
+                        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider w-fit border transition-all ${isReadOnly ? 'cursor-default opacity-80' : 'hover:scale-105 active:scale-95'} ${course.isDisabled ? 'bg-red-500/10 text-red-500 border-red-500/20 hover:bg-red-500/20' : 'bg-green-500/10 text-green-600 border-green-500/20 hover:bg-green-500/20'}`}
                         title={course.isDisabled ? "Enable Course" : "Disable Course"}
                     >
                         {course.isDisabled ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
@@ -84,27 +85,40 @@ const CourseTableRow = React.memo(({ course, onDelete, onToggle }) => {
             </TableCell>
             <TableCell className="px-6 py-4 text-right">
                 <div className="flex items-center justify-end gap-1">
-                    <button
-                        onClick={(e) => { e.stopPropagation(); navigate(`/admin/courses/manage/${course.id}`); }}
-                        className="p-2 hover:bg-primary/10 text-primary rounded-lg transition-colors"
-                        title="View & Edit Course"
-                    >
-                        <Edit2 className="w-4 h-4" />
-                    </button>
-                    <button
-                        onClick={(e) => { e.stopPropagation(); onDelete(course); }}
-                        className="p-2 hover:bg-red-500/10 text-red-500 rounded-lg transition-colors"
-                        title="Delete Course"
-                    >
-                        <Trash2 className="w-4 h-4" />
-                    </button>
+                    {isReadOnly ? (
+                        <button
+                            onClick={(e) => { e.stopPropagation(); navigate(`/admin/courses/manage/${course.id}`); }}
+                            className="p-2 hover:bg-primary/10 text-primary rounded-lg transition-colors flex items-center gap-2"
+                            title="View Course"
+                        >
+                            <Eye className="w-4 h-4" />
+                            <span className="text-xs font-bold">View</span>
+                        </button>
+                    ) : (
+                        <>
+                            <button
+                                onClick={(e) => { e.stopPropagation(); navigate(`/admin/courses/manage/${course.id}`); }}
+                                className="p-2 hover:bg-primary/10 text-primary rounded-lg transition-colors"
+                                title="View & Edit Course"
+                            >
+                                <Edit2 className="w-4 h-4" />
+                            </button>
+                            <button
+                                onClick={(e) => { e.stopPropagation(); onDelete(course); }}
+                                className="p-2 hover:bg-red-500/10 text-red-500 rounded-lg transition-colors"
+                                title="Delete Course"
+                            >
+                                <Trash2 className="w-4 h-4" />
+                            </button>
+                        </>
+                    )}
                 </div>
             </TableCell>
         </TableRow>
     );
 });
 
-const CourseTable = ({ courses, onDelete, onToggle }) => {
+const CourseTable = ({ courses, onDelete, onToggle, isReadOnly }) => {
     return (
         <div className="bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-white/10 shadow-sm overflow-hidden">
             <div className="overflow-x-auto">
@@ -133,6 +147,7 @@ const CourseTable = ({ courses, onDelete, onToggle }) => {
                                 course={course}
                                 onDelete={onDelete}
                                 onToggle={onToggle}
+                                isReadOnly={isReadOnly}
                             />
                         ))}
                     </TableBody>

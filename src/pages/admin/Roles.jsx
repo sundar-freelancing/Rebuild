@@ -62,6 +62,8 @@ const Roles = () => {
     const [acting, setActing] = useState(false);
     const [activeFilter, setActiveFilter] = useState('all');
 
+    const isReadOnly = profile?.role === 'Viewer';
+
     // UI state
     const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -83,8 +85,8 @@ const Roles = () => {
     const filteredUsers = users
         .filter(user => {
             // Role-based visibility
-            if (profile?.role === 'Admin') {
-                // Admins see Admins and Viewers, but not Super Admins
+            if (profile?.role === 'Admin' || profile?.role === 'Viewer') {
+                // Admins and Viewers see Admins and Viewers, but not Super Admins
                 if (user.role === 'Super Admin') return false;
             }
 
@@ -108,7 +110,7 @@ const Roles = () => {
         });
 
     const handleRoleUpdate = async () => {
-        if (!selectedUser || !targetRole || selectedUser.id === currentUser?.uid) return;
+        if (!selectedUser || !targetRole || selectedUser.id === currentUser?.uid || isReadOnly) return;
         setActing(true);
         try {
             await updateDoc(doc(db, 'users', selectedUser.id), {
@@ -126,7 +128,7 @@ const Roles = () => {
 
     const toggleLoginAccess = async (e, userId, currentStatus) => {
         e.stopPropagation();
-        if (userId === currentUser?.uid) return;
+        if (userId === currentUser?.uid || isReadOnly) return;
         setActing(true);
         try {
             await updateDoc(doc(db, 'users', userId), {
@@ -141,7 +143,7 @@ const Roles = () => {
     };
 
     const confirmDelete = async () => {
-        if (!selectedUser || selectedUser.id === currentUser?.uid) return;
+        if (!selectedUser || selectedUser.id === currentUser?.uid || isReadOnly) return;
         setActing(true);
         try {
             await deleteDoc(doc(db, 'users', selectedUser.id));
@@ -335,7 +337,7 @@ const Roles = () => {
                                                         <Switch
                                                             checked={!!user.isAuthorized}
                                                             onCheckedChange={() => toggleLoginAccess({ stopPropagation: () => { } }, user.id, user.isAuthorized)}
-                                                            disabled={isSelf || acting}
+                                                            disabled={isSelf || acting || isReadOnly}
                                                             onClick={(e) => e.stopPropagation()}
                                                             className="data-[state=checked]:bg-emerald-500"
                                                         />
@@ -357,7 +359,7 @@ const Roles = () => {
                                                                     <ScanEye className="w-3.5 h-3.5 mr-2 text-primary" /> View Details
                                                                 </DropdownMenuItem>
 
-                                                                {!isSelf && (
+                                                                {!isSelf && !isReadOnly && (
                                                                     <>
                                                                         <DropdownMenuSeparator />
                                                                         {rolesList.map(role => (

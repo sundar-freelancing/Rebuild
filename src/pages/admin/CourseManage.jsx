@@ -13,6 +13,7 @@ import * as LucideIcons from 'lucide-react';
 import { db } from '@/lib/firebase';
 import { addDoc, collection, doc, serverTimestamp, updateDoc } from 'firebase/firestore';
 import useAdminStore from '@/store/useAdminStore';
+import useAuthStore from '@/store/useAuthStore';
 
 const DynamicIcon = ({ name, className }) => {
     const IconComponent = LucideIcons[name] || LucideIcons.HelpCircle;
@@ -24,6 +25,8 @@ const CourseManage = () => {
     const [searchParams] = useSearchParams();
     const navigate = useNavigate();
     const { courses, domains, loading } = useAdminStore();
+    const profile = useAuthStore(s => s.profile);
+    const isReadOnly = profile?.role === 'Viewer';
     const [acting, setActing] = useState(false);
 
     const [formData, setFormData] = useState({
@@ -76,6 +79,7 @@ const CourseManage = () => {
 
     const handleSave = async (e) => {
         if (e) e.preventDefault();
+        if (isReadOnly) return;
         if (!formData.domainId) {
             alert("Please select a domain first.");
             return;
@@ -140,17 +144,19 @@ const CourseManage = () => {
                     >
                         Discard
                     </Button>
-                    <Button
-                        onClick={handleSave}
-                        disabled={acting}
-                        className="h-12 px-8 rounded-2xl shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all font-black uppercase tracking-wider bg-primary text-white border-none"
-                    >
-                        {acting ? (
-                            <><Loader2 className="w-5 h-5 mr-2 animate-spin" />Syncing...</>
-                        ) : (
-                            <><Save className="w-5 h-5 mr-2" />{isEditing ? 'Sync Changes' : 'Deploy Course'}</>
-                        )}
-                    </Button>
+                    {!isReadOnly && (
+                        <Button
+                            onClick={handleSave}
+                            disabled={acting}
+                            className="h-12 px-8 rounded-2xl shadow-xl shadow-primary/20 hover:scale-105 active:scale-95 transition-all font-black uppercase tracking-wider bg-primary text-white border-none"
+                        >
+                            {acting ? (
+                                <><Loader2 className="w-5 h-5 mr-2 animate-spin" />Syncing...</>
+                            ) : (
+                                <><Save className="w-5 h-5 mr-2" />{isEditing ? 'Sync Changes' : 'Deploy Course'}</>
+                            )}
+                        </Button>
+                    )}
                 </div>
             </div>
 
@@ -170,7 +176,7 @@ const CourseManage = () => {
                                 <Select
                                     value={formData.domainId}
                                     onValueChange={(val) => setFormData({ ...formData, domainId: val })}
-                                    disabled={isEditing}
+                                    disabled={isEditing || isReadOnly}
                                 >
                                     <SelectTrigger className="h-14 rounded-2xl border-2 border-slate-100 dark:border-white/5 focus:ring-4 focus:ring-primary/10 font-bold px-6 bg-slate-50/50 dark:bg-slate-900/50">
                                         <SelectValue placeholder="Identify the Subject / Industry" />
@@ -192,6 +198,7 @@ const CourseManage = () => {
                                     value={formData.courseName}
                                     onChange={(e) => setFormData({ ...formData, courseName: e.target.value })}
                                     required
+                                    disabled={isReadOnly}
                                     className="h-14 rounded-2xl border-2 border-slate-100 dark:border-white/5 focus:ring-4 focus:ring-primary/10 font-black text-lg px-6 bg-slate-50/50 dark:bg-slate-900/50"
                                 />
                             </div>
@@ -204,6 +211,7 @@ const CourseManage = () => {
                                     value={formData.courseDesc}
                                     onChange={(e) => setFormData({ ...formData, courseDesc: e.target.value })}
                                     required
+                                    disabled={isReadOnly}
                                     className="rounded-2xl border-2 border-slate-100 dark:border-white/5 focus:ring-4 focus:ring-primary/10 font-medium p-6 resize-none leading-relaxed bg-slate-50/50 dark:bg-slate-900/50 min-h-[120px]"
                                 />
                             </div>
@@ -216,6 +224,7 @@ const CourseManage = () => {
                                         placeholder="e.g. 6 Months"
                                         value={formData.duration}
                                         onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
+                                        disabled={isReadOnly}
                                         className="h-14 rounded-2xl border-2 border-slate-100 dark:border-white/5 pl-12 pr-6 focus:ring-primary/10 font-bold bg-slate-50/50 dark:bg-slate-900/50"
                                     />
                                 </div>
@@ -223,7 +232,7 @@ const CourseManage = () => {
 
                             <div className="space-y-3">
                                 <Label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Complexity Level</Label>
-                                <Select value={formData.level} onValueChange={(v) => setFormData({ ...formData, level: v })}>
+                                <Select value={formData.level} onValueChange={(v) => setFormData({ ...formData, level: v })} disabled={isReadOnly}>
                                     <SelectTrigger className="h-14 rounded-2xl border-2 border-slate-100 dark:border-white/5 font-bold px-6 bg-slate-50/50 dark:bg-slate-900/50">
                                         <SelectValue />
                                     </SelectTrigger>
@@ -251,6 +260,7 @@ const CourseManage = () => {
                             placeholder="Map out the technical milestones..."
                             value={formData.syllabus}
                             onChange={(e) => setFormData({ ...formData, syllabus: e.target.value })}
+                            disabled={isReadOnly}
                             className="rounded-3xl border-2 border-slate-100 dark:border-white/5 focus:ring-4 focus:ring-primary/10 font-medium p-8 resize-none leading-loose bg-slate-50/50 dark:bg-slate-900/50 min-h-[250px]"
                         />
                     </div>
@@ -272,6 +282,7 @@ const CourseManage = () => {
                                     placeholder="Enter Name"
                                     value={formData.instructorName}
                                     onChange={(e) => setFormData({ ...formData, instructorName: e.target.value })}
+                                    disabled={isReadOnly}
                                     className="rounded-xl border-slate-200 focus:ring-primary/20 font-bold bg-slate-50/50 h-12"
                                 />
                             </div>
@@ -285,6 +296,7 @@ const CourseManage = () => {
                                         placeholder="https://images.com/..."
                                         value={formData.instructorImage}
                                         onChange={(e) => setFormData({ ...formData, instructorImage: e.target.value })}
+                                        disabled={isReadOnly}
                                         className="rounded-xl border-slate-200 focus:ring-primary/20 font-medium text-xs bg-slate-50/50 h-10"
                                     />
                                 </div>
@@ -308,6 +320,7 @@ const CourseManage = () => {
                                 <Switch
                                     checked={formData.popular}
                                     onCheckedChange={(c) => setFormData({ ...formData, popular: c })}
+                                    disabled={isReadOnly}
                                     className="data-[state=checked]:bg-primary"
                                 />
                             </div>
@@ -323,6 +336,7 @@ const CourseManage = () => {
                                 <Switch
                                     checked={formData.isDisabled}
                                     onCheckedChange={(c) => setFormData({ ...formData, isDisabled: c })}
+                                    disabled={isReadOnly}
                                 />
                             </div>
                         </div>
@@ -351,6 +365,7 @@ const CourseManage = () => {
                                     placeholder="e.g. Code2, Globe, Cpu"
                                     value={formData.IconName}
                                     onChange={(e) => setFormData({ ...formData, IconName: e.target.value })}
+                                    disabled={isReadOnly}
                                     className="rounded-xl border-white/20 dark:border-slate-200 bg-white/5 dark:bg-slate-50 focus:ring-primary/20 font-bold h-12 flex-1"
                                 />
                             </div>

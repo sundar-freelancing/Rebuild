@@ -46,7 +46,6 @@ export const LeadCaptureProvider = ({ children }) => {
                     title: 'Ready to Accelerate Your Career?',
                     subtitle: 'Join ReBuild IT and get a personalized career roadmap from industry experts.'
                 });
-                localStorage.setItem('hasSeenLeadPopup', 'true');
             }
         }, 60000); // 60 seconds
 
@@ -87,6 +86,7 @@ export const LeadCaptureProvider = ({ children }) => {
                             subtitle={config.subtitle}
                             source={config.source}
                             onSuccess={() => {
+                                localStorage.setItem('hasSeenLeadPopup', 'true');
                                 setTimeout(closeModal, 2000);
                             }}
                         />

@@ -35,8 +35,14 @@ const useAuthStore = create((set, get) => ({
                     if (snap.exists()) {
                         set({ profile: snap.data() });
                     } else {
-                        set({ profile: null });
+                        console.warn("No firestore profile found for auth user. Logging out...");
+                        signOut(auth).catch(console.error);
+                        set({ profile: null, user: null });
                     }
+                }, (error) => {
+                    console.error("Profile listener error (e.g. invalid permissions). Logging out...", error);
+                    signOut(auth).catch(console.error);
+                    set({ profile: null, user: null });
                 });
                 set({ _unsubProfile: unsubProfile });
             } else {
