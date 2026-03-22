@@ -1,6 +1,7 @@
 import { Mail, Phone, MapPin, Clock } from 'lucide-react';
 import PageHero from '@/components/common/PageHero';
 import LeadForm from '@/components/common/LeadForm';
+import SEO from '@/components/SEO';
 import useSiteConfigStore from '@/store/useSiteConfigStore';
 
 /* ─────────────────────────────────────────────────────────
@@ -38,6 +39,7 @@ const Contact = () => {
 
     return (
         <div className="min-h-screen selection:bg-primary/20">
+            <SEO title="Contact Us" description="Have a project in mind or just want to say hello? Get in touch with us." url="/contact" />
 
             {/* ════════════════════════════════════════════════
                 1. SIMPLE & ATTRACTIVE HERO

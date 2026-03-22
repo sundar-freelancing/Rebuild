@@ -1,4 +1,5 @@
 import React from 'react';
+import SEO from '@/components/SEO';
 import HeroSection from '@/components/home/HeroSection';
 import SocialProof from '@/components/home/SocialProof';
 import WhyTrustUs from '@/components/home/WhyTrustUs';
@@ -12,6 +13,7 @@ import FinalCTA from '@/components/home/FinalCTA';
 const Home = () => {
     return (
         <>
+            <SEO title="Home" description="Empowering the next generation of Tech Leaders. Learn highly sought after IT skills today." url="/" />
             <HeroSection />
             <SocialProof />
             <WhyTrustUs />

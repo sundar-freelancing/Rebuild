@@ -1,4 +1,5 @@
 import React from 'react';
+import SEO from '@/components/SEO';
 import { Target, Users, Zap, Award, Quote, Calendar, Milestone } from 'lucide-react';
 import SocialProof from '@/components/home/SocialProof';
 import PageHero from '@/components/common/PageHero';
@@ -9,6 +10,7 @@ const About = () => {
 
     return (
         <div className="min-h-screen overflow-hidden">
+            <SEO title="About Us" description="Empowering the next Tech Leaders. We are on a mission to bridge the gap between education and industry." url="/about" />
             <PageHero
                 badge="Our Story"
                 title="Empowering the next"
