@@ -9,9 +9,10 @@ import {
 import useAuthStore from '@/store/useAuthStore';
 import Login from '@/pages/admin/Login';
 import useAdminStore from '@/store/useAdminStore';
-import { BookOpen, Building2, Clock, Globe, LayoutDashboard, Loader2, LogOut, Menu, Quote, Settings2, ShieldAlert, ShieldCheck, UserCircle } from 'lucide-react';
+import { BookOpen, Building2, Clock, Globe, LayoutDashboard, Loader2, LogOut, Menu, Quote, Settings2, ShieldAlert, ShieldCheck, UserCircle, Sun, Moon, Monitor } from 'lucide-react';
 import React, { useState } from 'react';
 import { Link, Outlet, useLocation } from 'react-router-dom';
+import { useTheme } from '@/context/ThemeContext';
 
 const adminMenus = [
     { name: 'Lead Dashboard', href: '/admin', icon: LayoutDashboard },
@@ -55,6 +56,13 @@ export const AdminLayout = () => {
     const filteredMenus = adminMenus.filter(checkAuthorization);
     const [sheetOpen, setSheetOpen] = useState(false);
     const location = useLocation();
+
+    const { theme, setTheme } = useTheme();
+    const cycleTheme = () => {
+        setTheme(theme === 'system' ? 'light' : theme === 'light' ? 'dark' : 'system');
+    };
+    const themeLabel = theme === 'system' ? 'System' : theme === 'light' ? 'Light' : 'Dark';
+    const ThemeIcon = theme === 'system' ? Monitor : theme === 'light' ? Sun : Moon;
 
     // Start Firebase auth listener when admin layout mounts
     React.useEffect(() => {
@@ -231,6 +239,16 @@ export const AdminLayout = () => {
                             <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
                             Live System
                         </div>
+
+                        <button
+                            type="button"
+                            onClick={cycleTheme}
+                            className="size-10 rounded-full bg-slate-100 dark:bg-slate-900 border-2 border-white dark:border-slate-700 shadow-sm flex items-center justify-center text-slate-500 hover:text-primary transition-all duration-300 focus:outline-none"
+                            aria-label={`Theme: ${themeLabel}. Click to switch.`}
+                            title={`Theme: ${themeLabel}`}
+                        >
+                            <ThemeIcon className="size-5 shrink-0" />
+                        </button>
 
                         {/* Account Hub */}
                         <Link to="/admin/account" className="flex items-center gap-3 pl-4 border-l border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 px-2 py-1 rounded-xl transition-all">

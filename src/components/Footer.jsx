@@ -117,11 +117,7 @@ const Footer = () => {
                             <ThemeIcon className="size-4 shrink-0" />
                             <span className="font-medium">{themeLabel}</span>
                         </button>
-                        {footerLegalLinks.map((link, index) => (
-                            <Link key={index} className="text-slate-200 hover:text-white transition-all duration-300" to={link.href}>
-                                {link.name}
-                            </Link>
-                        ))}
+
                     </div>
                 </div>
             </div>
