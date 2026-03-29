@@ -2,14 +2,16 @@ import { ArrowRight, CheckCircle2, Sparkles } from 'lucide-react';
 import PageHero from '@/components/common/PageHero';
 import SectionHeader from '@/components/common/SectionHeader';
 import GlassCard from '@/components/common/GlassCard';
-import { placementServices, placementProcessSteps } from '@/utils/constants';
+import { placementServices, placementProcessSteps, SEO_TITLES } from '@/utils/constants';
 import SocialProof from '@/components/home/SocialProof';
 import Testimonials from '@/components/home/Testimonials';
 import FinalCTA from '@/components/home/FinalCTA';
+import SEO from '@/components/SEO';
 
 const Services = () => {
     return (
         <div className="min-h-screen overflow-hidden">
+            <SEO title={SEO_TITLES.services} description="Transform your career with Rebuild It Solution's expert mentorship, mock interviews, resume reviews, and placement services designed for tech professionals." url="/services" />
             {/* Hero Section */}
             <PageHero
                 badge="Career Accelerator"

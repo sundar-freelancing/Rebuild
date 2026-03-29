@@ -1,5 +1,17 @@
 import { Bug, Settings, Network, TrendingUp, BookOpen, Users, Compass, Code, Layers, PlayCircle, Rocket, Mail, Phone, MapPin, Clock, MessageSquare, Target, Search, Shield, GraduationCap } from 'lucide-react';
 
+export const SEO_TITLES = {
+  home:     "Rebuild It Solution | Career Transformation Platform for Students & Professionals",
+  about:    "About Rebuild It Solution | Our Mission to Transform Careers into Tech Success",
+  courses:  "Job-Oriented Tech Courses | Rebuild It Solution Career Programs",
+  services: "Career Growth & Mentorship Services | Rebuild It Solution",
+  students: "Career Guidance for College Students | Rebuild It Solution Programs",
+  contact:  "Contact Rebuild It Solution | Start Your Career Transformation Today",
+  admin:    "Admin Dashboard | Rebuild It Solution",
+};
+
+
+
 
 
 

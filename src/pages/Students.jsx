@@ -2,11 +2,13 @@ import { ArrowRight, GraduationCap, Zap, Users, CheckCircle2, PlayCircle } from 
 import PageHero from '@/components/common/PageHero';
 import SectionHeader from '@/components/common/SectionHeader';
 import GlassCard from '@/components/common/GlassCard';
-import { collegeStudentPrograms } from '@/utils/constants';
+import { collegeStudentPrograms, SEO_TITLES } from '@/utils/constants';
+import SEO from '@/components/SEO';
 
 const Students = () => {
     return (
         <div className="min-h-screen overflow-hidden">
+            <SEO title={SEO_TITLES.students} description="Special programs from Rebuild It Solution designed to help college students land top-tier tech jobs — from placement cracking to campus-to-corporate transitions." url="/students" />
             <PageHero
                 badge="Campus To Corporate"
                 icon={GraduationCap}

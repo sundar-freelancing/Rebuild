@@ -2,6 +2,7 @@ import { Mail, Phone, MapPin, Clock } from 'lucide-react';
 import PageHero from '@/components/common/PageHero';
 import LeadForm from '@/components/common/LeadForm';
 import SEO from '@/components/SEO';
+import { SEO_TITLES } from '@/utils/constants';
 import useSiteConfigStore from '@/store/useSiteConfigStore';
 
 /* ─────────────────────────────────────────────────────────
@@ -39,7 +40,7 @@ const Contact = () => {
 
     return (
         <div className="min-h-screen selection:bg-primary/20">
-            <SEO title="Contact Us" description="Have a project in mind or just want to say hello? Get in touch with us." url="/contact" />
+            <SEO title={SEO_TITLES.contact} description="Have a question or ready to start your tech career journey? Contact Rebuild It Solution and we'll help you take the first step." url="/contact" />
 
             {/* ════════════════════════════════════════════════
                 1. SIMPLE & ATTRACTIVE HERO

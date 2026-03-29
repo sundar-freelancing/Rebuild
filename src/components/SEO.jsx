@@ -1,11 +1,10 @@
 import { Helmet } from "react-helmet-async";
 
 const SEO = ({ title, description, url, image, type = "website" }) => {
-  const siteName = "ReBuild | Premium Solutions";
-  const defaultTitle = siteName;
-  const defaultDescription = "ReBuild - Premium building and restoration services.";
-  
-  const formattedTitle = title ? `${title} | ${siteName}` : defaultTitle;
+  const defaultTitle = "Rebuild It Solution | Career Transformation Platform for Students & Professionals";
+  const defaultDescription = "Rebuild It Solution - Empowering the next generation of Tech Leaders. Master in-demand IT skills, get placed, and accelerate your career.";
+
+  const formattedTitle = title || defaultTitle;
   const metaDescription = description || defaultDescription;
   const metaUrl = url ? `https://www.rebuilditsolutions.com${url}` : "https://www.rebuilditsolutions.com";
 

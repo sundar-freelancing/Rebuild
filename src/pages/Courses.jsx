@@ -2,6 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { ArrowRight, Clock, Star, BookOpen, HelpCircle } from 'lucide-react';
 import PageHero from '@/components/common/PageHero';
 import SEO from '@/components/SEO';
+import { SEO_TITLES } from '@/utils/constants';
 import GlassCard from '@/components/common/GlassCard';
 import { Link } from 'react-router-dom';
 import { useLeadCapture } from '@/context/LeadCaptureContext';
@@ -46,7 +47,7 @@ const Courses = () => {
 
     return (
         <div className="min-h-screen overflow-hidden">
-            <SEO title="Our Courses" description="Master the Digital Frontier with industry-vetted curriculum." url="/courses" />
+            <SEO title={SEO_TITLES.courses} description="Explore job-oriented IT courses in automation testing, Selenium, and more. Industry-vetted curriculum designed to fast-track your tech career." url="/courses" />
             <PageHero
                 badge="Knowledge Hub"
                 icon={BookOpen}
